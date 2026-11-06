@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1B2A49">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SSC CGL 2027">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<title>SSC CGL 2027 Planner</title>
+<style>
+:root{--navy:#1B2A49;--teal:#0E8A8A;--gold:#F2A93B;--bg:#F3F6F9;--card:#fff;--ink:#1F2933;--mut:#6B7785;--line:#E3E9EF;--ok:#2E9E5B;--bad:#D64545;--soft:#EAF4F4}
+@media(prefers-color-scheme:dark){:root{--bg:#0F1623;--card:#182233;--ink:#E8EEF5;--mut:#93A1B3;--line:#27344A;--soft:#17303A}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+header.top{background:linear-gradient(135deg,var(--navy),#27406b);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 18px 26px;border-radius:0 0 26px 26px}
+header.top small{opacity:.8;font-size:12px;letter-spacing:.5px}
+header.top h1{margin:2px 0 0;font-size:22px}
+.wrap{padding:0 14px;margin-top:-16px}
+.card{background:var(--card);border-radius:18px;padding:14px;margin:12px 0;box-shadow:0 2px 10px rgba(20,35,60,.07);border:1px solid var(--line)}
+.row{display:flex;align-items:center;gap:12px}
+.grow{flex:1;min-width:0}
+h2{font-size:16px;margin:4px 0 8px}
+.mut{color:var(--mut);font-size:13px}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--soft);color:var(--teal)}
+.task{display:flex;gap:12px;padding:12px 4px;border-bottom:1px solid var(--line);align-items:flex-start}
+.task:last-child{border:0}
+.chk{width:26px;height:26px;border-radius:9px;border:2px solid var(--teal);flex:none;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;margin-top:2px}
+.task.done .chk{background:var(--ok);border-color:var(--ok)}
+.task.done .tx{opacity:.55;text-decoration:line-through}
+.tag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px}
+.s-Quant{color:#2563EB}.s-Reasoning{color:#9333EA}.s-English{color:#D97706}.s-GA{color:#059669}.s-Revision{color:#DC2626}
+.tx{font-size:14px;line-height:1.4}
+.time{font-size:12px;color:var(--mut);white-space:nowrap}
+.ring{position:relative;width:86px;height:86px;flex:none}
+.ring svg{transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:19px}
+.btn{border:0;background:var(--teal);color:#fff;padding:11px 16px;border-radius:12px;font-weight:700;font-size:14px;width:100%}
+.btn.alt{background:var(--soft);color:var(--teal)}
+.btn.warn{background:#FDECEC;color:var(--bad)}
+.btn.sm{width:auto;padding:8px 12px;font-size:13px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--soft);border-radius:14px;padding:12px;text-align:center}
+.stat b{display:block;font-size:22px}.stat span{font-size:12px;color:var(--mut)}
+.bar{height:9px;background:var(--line);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--gold));border-radius:9px}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:20}
+nav.tabs button{flex:1;border:0;background:none;color:var(--mut);font-size:11px;padding:6px 0;font-weight:600}
+nav.tabs button.on{color:var(--teal)}
+nav.tabs svg{display:block;margin:0 auto 2px;width:22px;height:22px}
+.chips{display:flex;gap:8px;overflow:auto;padding:4px 0 8px}
+.chip{border:1px solid var(--line);background:var(--card);padding:7px 13px;border-radius:99px;font-size:13px;white-space:nowrap;color:var(--ink)}
+.chip.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.day{display:flex;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.day:last-child{border:0}
+.dot{width:38px;height:38px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--soft);font-size:10px;color:var(--mut);flex:none;line-height:1.1}
+.dot b{font-size:15px;color:var(--ink)}
+.dot.full{background:var(--ok);color:#fff}.dot.full b{color:#fff}.dot.part{background:#FFF1CF}.dot.today{outline:2px solid var(--gold)}
+input,textarea,select{width:100%;padding:11px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:15px;font-family:inherit}
+label{font-size:12px;color:var(--mut);display:block;margin:8px 0 4px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(90px + env(safe-area-inset-bottom));background:var(--navy);color:#fff;padding:12px 18px;border-radius:14px;z-index:50;font-size:14px;max-width:90%;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:40;display:flex;align-items:flex-end}
+.sheet{background:var(--card);width:100%;border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto}
+.badge{display:inline-flex;align-items:center;gap:6px;background:var(--soft);padding:7px 11px;border-radius:12px;margin:4px 4px 0 0;font-size:13px}
+.badge.lock{opacity:.35;filter:grayscale(1)}
+.banner{background:#FFF1CF;color:#6a4a00;border-radius:14px;padding:11px 13px;font-size:13px;margin:12px 0}
+.timer{font-size:40px;font-weight:800;text-align:center;letter-spacing:2px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<header class="top"><small id="hdrSmall"></small><h1 id="hdrTitle">SSC CGL 2027</h1></header>
+<div class="wrap" id="app"></div>
+<nav class="tabs" id="tabs"></nav>
+<script src="data.js"></script>
+<script>
+"use strict";
+const DAYS=PLAN.days, MOCKS=PLAN.mocks;
+const KEY="sscCgl2027v1";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const iso=d=>d.toLocaleDateString("en-CA");
+const todayISO=()=>iso(new Date());
+let S;
+try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+S=Object.assign({done:{},mocks:{},notes:[],focus:{},notified:{},reminded:{},set:{name:"",time:"06:30",remind:true}},S||{});
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+let tab="today", view=null, monthF="All", timer={t:1500,run:false,mode:"focus",h:null};
+
+const dayIndexFor=d=>{const i=DAYS.findIndex(x=>x.d===d);return i>=0?i:(d<DAYS[0].d?0:DAYS.length-1)};
+const planned=day=>day.t.reduce((a,t)=>a+t[1],0);
+const doneMin=day=>day.t.reduce((a,t,i)=>a+(S.done[day.n+":"+i]?t[1]:0),0);
+const pct=day=>planned(day)?doneMin(day)/planned(day):0;
+const fmt=m=>Math.floor(m/60)+"h "+String(m%60).padStart(2,"0")+"m";
+function streaks(){
+  const t=todayISO();let cur=0,best=0,run=0;
+  const past=DAYS.filter(d=>d.d<=t);
+  past.forEach(d=>{if(pct(d)>=0.8){run++;best=Math.max(best,run)}else run=0});
+  let i=past.length-1; if(i>=0&&past[i].d===t&&pct(past[i])<0.8)i--;
+  while(i>=0&&pct(past[i])>=0.8){cur++;i--}
+  return{cur,best};
+}
+function score(){
+  const t=todayISO();const past=DAYS.filter(d=>d.d<=t);
+  const pm=past.reduce((a,d)=>a+planned(d),0), dm=past.reduce((a,d)=>a+doneMin(d),0);
+  const parts=[];
+  const cons=pm?Math.min(1,dm/pm):0; parts.push(["Consistency",cons,.5]);
+  const ms=Object.entries(S.mocks).filter(([k,v])=>v.score!=null&&v.score!=="").sort();
+  if(ms.length){const last=ms.slice(-3).map(x=>+x[1].score);parts.push(["Mock scores",Math.min(1,(last.reduce((a,b)=>a+b,0)/last.length)/170),.25]);
+    const acc=ms.filter(x=>x[1].acc).slice(-3).map(x=>+x[1].acc);
+    if(acc.length)parts.push(["Accuracy",Math.min(1,(acc.reduce((a,b)=>a+b,0)/acc.length)/90),.15]);}
+  parts.push(["Streak",Math.min(1,streaks().cur/30),.10]);
+  const w=parts.reduce((a,p)=>a+p[2],0);
+  return{val:Math.round(100*parts.reduce((a,p)=>a+p[1]*p[2],0)/w),parts,dm};
+}
+function level(v){return v>=85?"Top-rank track":v>=70?"Strong":v>=50?"On track":v>=30?"Building":"Getting started"}
+function toast(m){const e=document.createElement("div");e.className="toast";e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),3200)}
+async function notify(title,body){
+  try{
+    if(!("Notification" in window)||Notification.permission!=="granted")return false;
+    const reg=await navigator.serviceWorker.getRegistration();
+    if(reg)reg.showNotification(title,{body,icon:"icon-192.png",badge:"icon-192.png",tag:title});
+    else new Notification(title,{body,icon:"icon-192.png"});
+    return true;
+  }catch(e){return false}
+}
+function toggle(day,i){
+  const k=day.n+":"+i;
+  if(S.done[k])delete S.done[k];else S.done[k]=1;
+  const was=S.notified[day.n];
+  save();
+  const p=pct(day);
+  if(S.done[k]){
+    const t=day.t[i];
+    toast("Done: "+t[0]+" ("+Math.round(p*100)+"% of today)");
+    if(p>=0.999&&!was){S.notified[day.n]=1;save();toast("Day "+day.n+" complete! Great work.");
+      notify("Day "+day.n+" complete","All tasks done. Streak: "+streaks().cur+" day(s). Prep score: "+score().val+"/100.")}
+    else notify("Task completed",t[0]+" done. "+Math.round(p*100)+"% of Day "+day.n+" finished.");
+  }
+  render();
+}
+/* ---------- views ---------- */
+function ring(p,size=86,stroke=9){const r=(size-stroke)/2,c=2*Math.PI*r;
+  return `<div class="ring" style="width:${size}px;height:${size}px"><svg width="${size}" height="${size}"><circle cx="${size/2}" cy="${size/2}" r="${r}" stroke="var(--line)" stroke-width="${stroke}" fill="none"/><circle cx="${size/2}" cy="${size/2}" r="${r}" stroke="var(--teal)" stroke-width="${stroke}" fill="none" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-p)}"/></svg><b>${Math.round(p*100)}%</b></div>`}
+function taskList(day){
+  return day.t.map((t,i)=>{const d=S.done[day.n+":"+i];const cls="s-"+t[0].split(" ")[0];
+    return `<div class="task ${d?"done":""}" data-k="${day.n}:${i}"><div class="chk">${d?"&#10003;":""}</div><div class="grow"><div class="tag ${cls}">${esc(t[0])} <span class="time">&middot; ${fmt(t[1])}</span></div><div class="tx">${esc(t[2])}</div></div></div>`}).join("");
+}
+function dayCard(day,isToday){
+  const p=pct(day);
+  return `<div class="card"><div class="row">${ring(p)}<div class="grow"><span class="pill">${esc(day.p)}</span><h2 style="margin:6px 0 2px">Day ${day.n} &middot; ${new Date(day.d+"T00:00").toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"})}</h2><div class="mut">${fmt(doneMin(day))} of ${fmt(planned(day))}</div></div></div>
+  <div class="banner" style="background:var(--soft);color:var(--ink)">&#127919; <b>Goal:</b> ${esc(day.g)}</div>${taskList(day)}</div>`;
+}
+function vToday(){
+  const t=todayISO(), i=dayIndexFor(t), day=DAYS[i];
+  const st=streaks(), sc=score();
+  let msg="";
+  if(t<DAYS[0].d)msg=`<div class="banner">Your plan starts on ${DAYS[0].d}. Showing Day 1.</div>`;
+  const nowH=new Date().getHours()*60+new Date().getMinutes();
+  const [rh,rm]=S.set.time.split(":").map(Number);
+  if(day.d===t&&pct(day)<1&&nowH>=rh*60+rm)msg+=`<div class="banner">&#9200; ${day.t.filter((x,j)=>!S.done[day.n+":"+j]).length} task(s) pending today. You can do it.</div>`;
+  const mk=MOCKS.find(m=>m.d===t);
+  if(mk)msg+=`<div class="banner">&#128221; <b>${esc(mk.t)}</b> scheduled today. Log your score in the Mocks tab.</div>`;
+  const nxt=MOCKS.find(m=>m.d>t);
+  return `${msg}${dayCard(day,true)}
+  <div class="grid"><div class="stat"><b>&#128293; ${st.cur}</b><span>day streak</span></div><div class="stat"><b>${sc.val}</b><span>prep score</span></div></div>
+  <div class="card"><h2>Focus timer</h2><div class="timer" id="tm">${tmFmt()}</div><div class="mut" style="text-align:center" id="tmMode">${timer.mode==="focus"?"Focus 25 min":"Break 5 min"}</div>
+  <div class="row" style="margin-top:10px"><button class="btn" id="tmGo">${timer.run?"Pause":"Start"}</button><button class="btn alt" id="tmRs">Reset</button></div>
+  <div class="mut" style="margin-top:8px">Focus today: ${S.focus[t]||0} min</div></div>
+  ${nxt?`<div class="card"><h2>Next mock</h2><div class="row"><div class="grow"><b>${esc(nxt.t)}</b><div class="mut">${nxt.d}</div></div><span class="pill">${Math.ceil((new Date(nxt.d)-new Date(t))/864e5)} days</span></div></div>`:""}
+  <div class="card"><h2>Quick error-log note</h2><textarea id="qn" rows="2" placeholder="Wrong question, topic, why it went wrong"></textarea><div style="height:8px"></div><button class="btn alt" id="qnSave">Save note</button></div>`;
+}
+function tmFmt(){return String(Math.floor(timer.t/60)).padStart(2,"0")+":"+String(timer.t%60).padStart(2,"0")}
+function vPlan(){
+  const months=["All",...new Set(DAYS.map(d=>new Date(d.d+"T00:00").toLocaleDateString(undefined,{month:"short",year:"numeric"})))];
+  const list=DAYS.filter(d=>monthF==="All"||new Date(d.d+"T00:00").toLocaleDateString(undefined,{month:"short",year:"numeric"})===monthF);
+  const t=todayISO();
+  return `<div class="chips">${months.map(m=>`<button class="chip ${m===monthF?"on":""}" data-m="${m}">${m}</button>`).join("")}</div>
+  <div class="card">${list.map(d=>{const p=pct(d);const dt=new Date(d.d+"T00:00");
+    return `<div class="day" data-d="${d.n}"><div class="dot ${p>=0.8?"full":p>0?"part":""} ${d.d===t?"today":""}"><b>${dt.getDate()}</b>${dt.toLocaleDateString(undefined,{month:"short"})}</div><div class="grow"><div style="font-size:14px;font-weight:600">Day ${d.n} &middot; ${dt.toLocaleDateString(undefined,{weekday:"short"})}</div><div class="mut" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(d.t[0]?d.t[0][2]:"")}</div></div><div class="mut">${Math.round(p*100)}%</div></div>`}).join("")}</div>`;
+}
+function vProgress(){
+  const sc=score(), st=streaks(), t=todayISO();
+  const subj={};DAYS.forEach(d=>d.t.forEach((x,i)=>{if(S.done[d.n+":"+i])subj[x[0]]=(subj[x[0]]||0)+x[1]}));
+  const maxS=Math.max(1,...Object.values(subj));
+  const ph={};DAYS.forEach(d=>{ph[d.p]=ph[d.p]||[0,0];ph[d.p][0]+=doneMin(d);ph[d.p][1]+=planned(d)});
+  const last7=[];for(let k=6;k>=0;k--){const dd=new Date();dd.setDate(dd.getDate()-k);const x=DAYS.find(z=>z.d===iso(dd));last7.push([dd.toLocaleDateString(undefined,{weekday:"narrow"}),x?pct(x):0])}
+  const doneDays=DAYS.filter(d=>pct(d)>=0.8).length;
+  const nm=Object.values(S.mocks).filter(m=>m.score).length;
+  const B=[["&#127793;","First task done",sc.dm>0],["&#128293;","7-day streak",st.best>=7],["&#127942;","30-day streak",st.best>=30],["&#9201;","50 hours",sc.dm>=3000],["&#128170;","100 hours",sc.dm>=6000],["&#128221;","First mock",nm>=1],["&#128200;","10 mocks",nm>=10],["&#11088;","25 days done",doneDays>=25],["&#128081;","100 days done",doneDays>=100]];
+  return `<div class="card"><div class="row">${ring(sc.val/100,104,11).replace(/>\d+%</,">"+sc.val+"<")}<div class="grow"><h2 style="margin:0">Prep score</h2><div class="mut">${level(sc.val)}</div><div class="mut" style="margin-top:4px">Based on consistency, mock scores, accuracy and streak.</div></div></div>
+  ${sc.parts.map(p=>`<div style="margin-top:10px"><div class="row mut"><span class="grow">${p[0]}</span><span>${Math.round(p[1]*100)}%</span></div><div class="bar"><i style="width:${p[1]*100}%"></i></div></div>`).join("")}</div>
+  <div class="grid"><div class="stat"><b>${fmt(sc.dm)}</b><span>studied</span></div><div class="stat"><b>${doneDays}</b><span>days completed</span></div><div class="stat"><b>${st.cur} / ${st.best}</b><span>streak / best</span></div><div class="stat"><b>${nm}</b><span>mocks logged</span></div></div>
+  <div class="card"><h2>Last 7 days</h2><div class="row" style="align-items:flex-end;height:90px;justify-content:space-between">${last7.map(x=>`<div style="text-align:center;flex:1"><div style="height:${Math.max(4,x[1]*70)}px;margin:0 6px;background:${x[1]>=.8?"var(--ok)":"var(--teal)"};border-radius:6px"></div><div class="mut">${x[0]}</div></div>`).join("")}</div></div>
+  <div class="card"><h2>Time by subject</h2>${Object.entries(subj).map(([k,v])=>`<div style="margin:8px 0"><div class="row mut"><span class="grow">${esc(k)}</span><span>${fmt(v)}</span></div><div class="bar"><i style="width:${v/maxS*100}%"></i></div></div>`).join("")||'<div class="mut">Complete tasks to see this.</div>'}</div>
+  <div class="card"><h2>Phase progress</h2>${Object.entries(ph).map(([k,v])=>`<div style="margin:8px 0"><div class="row mut"><span class="grow">${esc(k)}</span><span>${Math.round(v[0]/v[1]*100)}%</span></div><div class="bar"><i style="width:${v[0]/v[1]*100}%"></i></div></div>`).join("")}</div>
+  <div class="card"><h2>Badges</h2>${B.map(b=>`<span class="badge ${b[2]?"":"lock"}">${b[0]} ${b[1]}</span>`).join("")}</div>`;
+}
+function vMocks(){
+  const logged=Object.entries(S.mocks).filter(([k,v])=>v.score).sort();
+  const W=300,H=120,pad=22;let chart="";
+  if(logged.length>1){const pts=logged.map((x,i)=>[pad+i*(W-2*pad)/(logged.length-1),H-pad-(Math.min(200,+x[1].score)/200)*(H-2*pad)]);
+    const ty=H-pad-(170/200)*(H-2*pad);
+    chart=`<svg viewBox="0 0 ${W} ${H}" width="100%"><line x1="${pad}" x2="${W-pad}" y1="${ty}" y2="${ty}" stroke="var(--gold)" stroke-dasharray="4"/><text x="${W-pad}" y="${ty-4}" font-size="9" fill="var(--mut)" text-anchor="end">target 170</text><polyline fill="none" stroke="var(--teal)" stroke-width="2.5" points="${pts.map(p=>p.join(",")).join(" ")}"/>${pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="var(--teal)"/>`).join("")}</svg>`}
+  const t=todayISO();
+  return `<div class="card"><h2>Score trend</h2>${chart||'<div class="mut">Log two or more mocks to see your trend. Target: 170+ out of 200.</div>'}</div>
+  <div class="card"><h2>Mock schedule (${MOCKS.length})</h2>${MOCKS.map(m=>{const l=S.mocks[m.d];const past=m.d<=t;
+    return `<div class="day" data-mock="${m.d}"><div class="dot ${l&&l.score?"full":""}"><b>${new Date(m.d+"T00:00").getDate()}</b>${new Date(m.d+"T00:00").toLocaleDateString(undefined,{month:"short"})}</div><div class="grow"><div style="font-size:14px;font-weight:600">${esc(m.t)}</div><div class="mut">${l&&l.score?`Score ${l.score}${m.t.startsWith("Tier-II")?" / 450":" / 200"}${l.acc?" &middot; "+l.acc+"% accuracy":""}`:(past?"Tap to log score":"Upcoming")}</div></div></div>`}).join("")}</div>`;
+}
+function vMore(){
+  return `<div class="card"><h2>Profile and reminders</h2><label>Your name</label><input id="nm" value="${esc(S.set.name)}" placeholder="Name"><label>Daily reminder time</label><input type="time" id="rt" value="${S.set.time}">
+  <div style="height:10px"></div><button class="btn" id="bn">Enable notifications</button>
+  <div class="mut" style="margin-top:8px">Notifications on iPhone work only after you add this app to the Home Screen (iOS 16.4 or later). They fire reliably while the app is open or recently used. For guaranteed reminders, also add the daily alarm to your Calendar below.</div>
+  <div style="height:10px"></div><button class="btn alt" id="ics">Add daily reminder + mock alerts to Calendar (.ics)</button></div>
+  <div class="card"><h2>Error log and notes (${S.notes.length})</h2>${S.notes.slice().reverse().slice(0,30).map((n,i)=>`<div class="task"><div class="grow"><div class="tx">${esc(n.text)}</div><div class="mut">${n.d}</div></div><button class="btn warn sm" data-del="${S.notes.length-1-i}">Delete</button></div>`).join("")||'<div class="mut">Add notes from the Today tab.</div>'}</div>
+  <div class="card"><h2>Backup</h2><div class="row"><button class="btn alt" id="ex">Export data</button><button class="btn alt" id="im">Import data</button></div><input type="file" id="imf" class="hide" accept="application/json"><div style="height:8px"></div><button class="btn warn" id="rs">Reset everything</button></div>
+  <div class="card"><h2>Tips</h2><div class="tx">&bull; Do the Today tab every morning and tick tasks as you finish them.<br>&bull; A day counts for your streak at 80% of planned time.<br>&bull; Log every mock and its accuracy, because the prep score uses it.<br>&bull; Plan dates assume Tier-I in early Sept 2027. Shift phases when SSC announces dates.</div></div>`;
+}
+const ICON={today:'<path d="M12 3v3M5 8h14M6 5h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V7a2 2 0 012-2zM9 14l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',plan:'<path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>',progress:'<path d="M4 20V10M10 20V4M16 20v-8M22 20H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>',mocks:'<path d="M7 3h8l4 4v14H7zM15 3v4h4M10 13h6M10 17h6" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/>',more:'<circle cx="5" cy="12" r="2" fill="currentColor"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19" cy="12" r="2" fill="currentColor"/>'};
+const TABS=[["today","Today"],["plan","Plan"],["progress","Progress"],["mocks","Mocks"],["more","More"]];
+function render(){
+  const h=new Date().getHours();const g=h<12?"Good morning":h<17?"Good afternoon":"Good evening";
+  $("#hdrSmall").textContent=(S.set.name?g+", "+S.set.name:g).toUpperCase();
+  $("#hdrTitle").textContent=tab==="today"?"Today's plan":tab==="plan"?"Full plan":tab==="progress"?"Your progress":tab==="mocks"?"Mock tests":"Settings";
+  $("#tabs").innerHTML=TABS.map(t=>`<button class="${tab===t[0]?"on":""}" data-t="${t[0]}"><svg viewBox="0 0 24 24">${ICON[t[0]]}</svg>${t[1]}</button>`).join("");
+  const sy=scrollY;
+  $("#app").innerHTML=tab==="today"?vToday():tab==="plan"?(view?`<div style="margin-top:20px"><button class="chip" id="back">&larr; Back to plan</button></div>${dayCard(DAYS[view-1])}`:vPlan()):tab==="progress"?vProgress():tab==="mocks"?vMocks():vMore();
+  bind();scrollTo(0,sy);
+}
+function bind(){
+  document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{tab=b.dataset.t;view=null;render();scrollTo(0,0)});
+  document.querySelectorAll(".task[data-k]").forEach(el=>el.onclick=()=>{const [n,i]=el.dataset.k.split(":").map(Number);toggle(DAYS[n-1],i)});
+  document.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{monthF=b.dataset.m;render()});
+  document.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{view=+b.dataset.d;render();scrollTo(0,0)});
+  const back=$("#back");if(back)back.onclick=()=>{view=null;render()};
+  document.querySelectorAll("[data-mock]").forEach(b=>b.onclick=()=>mockSheet(b.dataset.mock));
+  document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{S.notes.splice(+b.dataset.del,1);save();render()});
+  const go=$("#tmGo");if(go){go.onclick=tmToggle;$("#tmRs").onclick=tmReset}
+  const qs=$("#qnSave");if(qs)qs.onclick=()=>{const v=$("#qn").value.trim();if(!v)return;S.notes.push({text:v,d:todayISO()});save();$("#qn").value="";toast("Note saved")};
+  if(tab==="more"){
+    $("#nm").onchange=e=>{S.set.name=e.target.value;save()};
+    $("#rt").onchange=e=>{S.set.time=e.target.value;save();scheduleReminder();toast("Reminder time saved")};
+    $("#bn").onclick=async()=>{if(!("Notification" in window)){toast("Notifications not supported here. Add to Home Screen first.");return}
+      const p=await Notification.requestPermission();toast(p==="granted"?"Notifications enabled":"Permission "+p);if(p==="granted")notify("SSC CGL planner","Notifications are on.")};
+    $("#ics").onclick=makeICS;
+    $("#ex").onclick=()=>{const b=new Blob([JSON.stringify(S)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="ssc-cgl-backup.json";a.click()};
+    $("#im").onclick=()=>$("#imf").click();
+    $("#imf").onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{try{S=Object.assign(S,JSON.parse(t));save();render();toast("Imported")}catch(x){toast("Invalid file")}})};
+    $("#rs").onclick=()=>{if(confirm("Erase all progress?")){localStorage.removeItem(KEY);location.reload()}};
+  }
+}
+function mockSheet(d){
+  const m=MOCKS.find(x=>x.d===d), l=S.mocks[d]||{}, t2=m.t.startsWith("Tier-II");
+  const el=document.createElement("div");el.className="modal";
+  el.innerHTML=`<div class="sheet"><h2>${esc(m.t)} &middot; ${d}</h2><label>Score (out of ${t2?450:200})</label><input id="ms" type="number" step="0.5" value="${l.score||""}"><label>Accuracy %</label><input id="ma" type="number" value="${l.acc||""}"><label>Weakest section / next action</label><input id="mn" value="${esc(l.note||"")}"><div style="height:12px"></div><button class="btn" id="msv">Save</button><div style="height:8px"></div><button class="btn alt" id="mcl">Cancel</button></div>`;
+  document.body.appendChild(el);
+  $("#mcl").onclick=()=>el.remove();el.onclick=e=>{if(e.target===el)el.remove()};
+  $("#msv").onclick=()=>{S.mocks[d]={score:$("#ms").value,acc:$("#ma").value,note:$("#mn").value};save();el.remove();
+    toast("Mock saved. Prep score: "+score().val);notify("Mock logged","Score "+$("#ms").value+". Prep score now "+score().val+"/100.");render()};
+}
+/* focus timer */
+function tmToggle(){timer.run=!timer.run;if(timer.run){timer.h=setInterval(()=>{timer.t--;
+  if(timer.mode==="focus"){const k=todayISO();S.focus[k]=(S.focus[k]||0)+(timer.t%60===0?1:0)}
+  const tm=$("#tm");if(tm)tm.textContent=tmFmt();
+  if(timer.t<=0){clearInterval(timer.h);timer.run=false;timer.mode=timer.mode==="focus"?"break":"focus";timer.t=timer.mode==="focus"?1500:300;save();
+    toast(timer.mode==="break"?"Focus done. Take a 5 min break.":"Break over. Back to work.");notify("Focus timer",timer.mode==="break"?"Take a 5 minute break.":"Break over.");if(tab==="today")render()}},1000)}else clearInterval(timer.h);if(tab==="today")render()}
+function tmReset(){clearInterval(timer.h);timer.run=false;timer.mode="focus";timer.t=1500;render()}
+/* reminders */
+let remT=null;
+function scheduleReminder(){
+  clearTimeout(remT);if(!S.set.remind)return;
+  const [h,m]=S.set.time.split(":").map(Number);const now=new Date(),at=new Date();at.setHours(h,m,0,0);
+  if(at<=now)at.setDate(at.getDate()+1);
+  remT=setTimeout(()=>{const day=DAYS[dayIndexFor(todayISO())];const left=day.t.filter((x,j)=>!S.done[day.n+":"+j]).length;
+    notify("Study time","Day "+day.n+": "+left+" task(s) waiting. "+day.g);scheduleReminder()},at-now);
+  // evening nudge
+  const ev=new Date();ev.setHours(20,30,0,0);
+  if(ev>now)setTimeout(()=>{const day=DAYS[dayIndexFor(todayISO())];const left=day.t.filter((x,j)=>!S.done[day.n+":"+j]).length;
+    if(left)notify("Evening check","You still have "+left+" task(s) today. Finish to keep your streak.")},ev-now);
+}
+function makeICS(){
+  const [h,m]=S.set.time.split(":");const pad=n=>String(n).padStart(2,"0");
+  const start=DAYS[0].d.replace(/-/g,"");let L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//SSC CGL 2027 Planner//EN","CALSCALE:GREGORIAN"];
+  L.push("BEGIN:VEVENT","UID:ssc-daily@planner","DTSTAMP:20261101T000000Z",`DTSTART:${start}T${pad(h)}${pad(m)}00`,`DTEND:${start}T${pad(h)}${pad((+m+30)%60)}00`,"RRULE:FREQ=DAILY;UNTIL=20270930T235959","SUMMARY:SSC CGL study time","DESCRIPTION:Open the SSC CGL planner and finish today's tasks.","BEGIN:VALARM","TRIGGER:PT0M","ACTION:DISPLAY","DESCRIPTION:Study time","END:VALARM","END:VEVENT");
+  L.push("BEGIN:VEVENT","UID:ssc-evening@planner","DTSTAMP:20261101T000000Z",`DTSTART:${start}T203000`,`DTEND:${start}T210000`,"RRULE:FREQ=DAILY;UNTIL=20270930T235959","SUMMARY:SSC CGL: log today's progress","BEGIN:VALARM","TRIGGER:PT0M","ACTION:DISPLAY","DESCRIPTION:Tick your tasks","END:VALARM","END:VEVENT");
+  MOCKS.forEach((mk,i)=>{const d=mk.d.replace(/-/g,"");L.push("BEGIN:VEVENT",`UID:ssc-mock-${i}@planner`,"DTSTAMP:20261101T000000Z",`DTSTART:${d}T070000`,`DTEND:${d}T093000`,"SUMMARY:SSC CGL "+mk.t,"BEGIN:VALARM","TRIGGER:-P1D","ACTION:DISPLAY","DESCRIPTION:Mock tomorrow","END:VALARM","END:VEVENT")});
+  L.push("END:VCALENDAR");
+  const b=new Blob([L.join("\r\n")],{type:"text/calendar"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="ssc-cgl-reminders.ics";a.click();
+  toast("Open the downloaded file to add the reminders to Calendar");
+}
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)render()});
+render();scheduleReminder();
+</script>
+</body>
+</html>
